@@ -7,6 +7,10 @@
     books = [...books, ""];
   }
   // adds the user's input to a list of books
+
+  function removeBook(index) {
+    books = [...books.slice(0, index), ...books.slice(index + 1)];
+  }
 </script>
 
 <Header />
@@ -19,6 +23,12 @@
     <div class="book">
       <input bind:value={books[index]} />
     </div>
+
+    <button
+      on:click={() => {
+        removeBook(index);
+      }}>remove</button
+    >
   {/each}
 </main>
 
