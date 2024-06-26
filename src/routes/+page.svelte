@@ -1,13 +1,25 @@
 <script>
-  import Header from '$lib/Header.svelte'
+  import Header from "$lib/Header.svelte";
+
+  let books = [];
+  // array to hold the list of books
+  function addBook() {
+    books = [...books, ""];
+  }
+  // adds the user's input to a list of books
 </script>
 
 <Header />
 
 <main>
-  <h2>SvelteKit</h2>
+  <button on:click={addBook}>new</button>
 
-  <p>Welcome to coding with SvelteKit, a modern JavaScript framework that makes it easy to code great apps.</p>
+  {#each books as book, index}
+    <!-- iterates over each book in the array -->
+    <div class="book">
+      <input bind:value={books[index]} />
+    </div>
+  {/each}
 </main>
 
 <footer>
