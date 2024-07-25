@@ -4,52 +4,54 @@
   let lists = [
     {
       name: "fiction",
-      books: [
+      list: [
         { name: "rooftoppers", read: false },
         { name: "the good thieves", read: false },
       ],
     },
     {
       name: "recipe",
-      books: [
+      list: [
         { name: "eat", read: false },
         { name: "supergood", read: false },
       ],
     },
   ];
   // array to hold the list of books
-  let books = "";
+  let list = "";
 
-  let currentList = lists[0];
+  let current = lists[0];
 
-  function addBook() {
-    // books = [...books, ""];
-    // books = [...books, { name: "", read: false }];
-    currentList.books = [...currentList.books, { name: "", read: false }];
+  function addItem() {
+    current.list = [...current.list, { name: "", read: false }];
   }
   // adds the user's input to a list of books
 
-  function removeBook(index) {
-    book = [...books.slice(0, index), ...books.slice(index + 1)];
+  function removeItem(index) {
+    current.list = [
+      ...current.list.slice(0, index),
+      ...current.list.slice(index + 1),
+    ];
   }
   // removes books from the array
 
-  function saveBooks() {
-    localStorage.lists = JSON.stringify(lists);
+  function saveItems() {
+    localStorage.items = JSON.stringify(lists);
     alert("saved");
   }
   // saves books to storage
 
-  function loadBooks() {
-    lists = JSON.parse(localStorage.lists);
+  function loadItems() {
+    lists = JSON.parse(localStorage.items);
+    alert("loaded");
   }
   // retrieves saved books after refreshing
 
-  function confirmLoadBooks() {
+  function confirmLoadItems() {
     var userConfirmed = confirm("are you sure");
     // asks the user whether they want to load or not
     if (userConfirmed) {
-      loadBooks();
+      loadItems();
       // loads the books at user's confirmation
     } else {
       alert("cancelled");
@@ -62,7 +64,7 @@
 <Header />
 
 <main>
-  <select bind:value={currentList}>
+  <select bind:value={current}>
     {#each lists as list}
       <option value={list}>
         {list.name}
@@ -70,25 +72,25 @@
     {/each}
   </select>
 
-  <button on:click={addBook}>new</button>
   <!-- adds input bar -->
-  <button on:click={saveBooks}>save</button>
+  <button on:click={saveItems}>save</button>
   <!-- saves the current list -->
-  <button on:click={confirmLoadBooks}>load</button>
+  <button on:click={confirmLoadItems}>load</button>
   <!-- asks the user whether they want to load the books or not, and runs whatever they pick -->
 
   <!-- Display all of the items in the currently selected list. -->
-  {#each currentList.books as book, index}
+  {#each current.list as item, index}
     <div class="book">
-      <input bind:value={book.name} />
-      <input type="checkbox" bind:checked={book.read} />
+      <button
+        on:click={() => {
+          removeItem(index);
+        }}>-</button
+      >
+      <input bind:value={item.name} />
+      <input type="checkbox" bind:checked={item.read} />
     </div>
-    <button
-      on:click={() => {
-        removeBook(index);
-      }}>remove</button
-    >
   {/each}
+  <button on:click={addItem}>+</button>
   <!-- 
   saves the book to the localStorage
   {#each books as book, index}
@@ -124,6 +126,7 @@
     padding: 2px 7px;
     margin: 3px;
     font-family: "Poppins", sans-serif;
+    font-weight: 500;
     color: rgb(16, 37, 16);
   }
 
@@ -138,5 +141,14 @@
     font-family: "Poppins", sans-serif;
     color: rgb(16, 37, 16);
     padding: 30px;
+  }
+
+  .book {
+    display: flex;
+  }
+
+  input {
+    height: 22px;
+    margin: 5px 2.5px 0px;
   }
 </style>
